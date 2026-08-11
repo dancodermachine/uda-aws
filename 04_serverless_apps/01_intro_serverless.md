@@ -174,4 +174,3 @@ resources:
 * CloudWatch Logs - process log events
 * Kinesis, DynamoDB - process a stream of updates
 * SNS - simple notification service
-
