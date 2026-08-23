@@ -1,0 +1,39 @@
+language: generic
+sudo: required
+
+services:
+  - docker
+
+env:
+  global:
+    - IMAGE_TAG=${TRAVIS_COMMIT::8}
+
+before_install:
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+
+script:
+  - docker build -t udagram-reverseproxy ./udagram-reverseproxy
+  - docker build -t udagram-frontend ./udagram-frontend
+  - docker build -t udagram-api-user ./udagram-api-user
+  - docker build -t udagram-api-feed ./udagram-api-feed
+
+after_success:
+  # Tag each image with the DockerHub username and a unique tag per build,
+  # plus "latest" so the repo always has a moving pointer to the newest build.
+  - docker tag udagram-reverseproxy $DOCKER_USERNAME/udagram-reverseproxy:$IMAGE_TAG
+  - docker tag udagram-reverseproxy $DOCKER_USERNAME/udagram-reverseproxy:latest
+  - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend:$IMAGE_TAG
+  - docker tag udagram-frontend $DOCKER_USERNAME/udagram-frontend:latest
+  - docker tag udagram-api-user $DOCKER_USERNAME/udagram-api-user:$IMAGE_TAG
+  - docker tag udagram-api-user $DOCKER_USERNAME/udagram-api-user:latest
+  - docker tag udagram-api-feed $DOCKER_USERNAME/udagram-api-feed:$IMAGE_TAG
+  - docker tag udagram-api-feed $DOCKER_USERNAME/udagram-api-feed:latest
+
+  - docker push $DOCKER_USERNAME/udagram-reverseproxy:$IMAGE_TAG
+  - docker push $DOCKER_USERNAME/udagram-reverseproxy:latest
+  - docker push $DOCKER_USERNAME/udagram-frontend:$IMAGE_TAG
+  - docker push $DOCKER_USERNAME/udagram-frontend:latest
+  - docker push $DOCKER_USERNAME/udagram-api-user:$IMAGE_TAG
+  - docker push $DOCKER_USERNAME/udagram-api-user:latest
+  - docker push $DOCKER_USERNAME/udagram-api-feed:$IMAGE_TAG
+  - docker push $DOCKER_USERNAME/udagram-api-feed:latest
