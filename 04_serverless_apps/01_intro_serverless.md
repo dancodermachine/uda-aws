@@ -39,6 +39,7 @@ When we send a request to execute a Lambda function, AWS Lambda creates an envir
 1. It starts a container for the specific environment and loads the function code into the environment.
 2. It sends an event to our function.
 3. The same process is repeated for all the other requests coming in.
+4. At most 1,000 concurrent executions by default.
 
 ## 4. Debugging Lambda Functions
 Two main tools to troubleshoot lambda functions are:
@@ -72,7 +73,33 @@ Async/await can only be used in an asynchronous function. An asynchronous functi
 | `logStreamName` | Log stream for the function |
 | `getRemainingTimeInMillis()` | Get remaining time in ms |
 
-## 8. YAML
+## 8. Serverless Frameworks
+Serverless Framework is one of the most popular frameworks for creating serverless applications. It supports various cloud providers including AWS, Google Cloud, Microsoft Azure, etc.
+* Standardized way of deploying an application
+* Create necessary resources
+* Manage applications
+  - Remove application, call functions, run application locally
+* May allow to implement applications
+  - In different languages
+  - For different cloud providers
+  - On-premise serverless frameworks
+
+It allows to deploy package code, deploy Lambda functions, provision resources, and so on.
+
+Why Serverless Framework?
+* One of the most popular frameworks.
+* Huge community.
+* Dozens of plugins to extend Serverless framework.
+
+It is like terraform.
+
+Serverless Frameworks Landscape:
+* Serverless Framework: Most developed. Used in this course
+* Zappa: Python only
+* Serverless Application Model (SAM)L From AWS. CloudFormation extension
+* Claudia.js: Node.js and AWS only
+
+## 9. YAML
 * Serverless framework configuration is in YAML format.
 * Superset of JSON.
     - A valid JSON is a valid YAML file.
@@ -86,14 +113,14 @@ Async/await can only be used in an asynchronous function. An asynchronous functi
 
 Check: www.bairesdev.com/tools/json2yaml/
 
-## 9. Configure Serverless Applications
+## 10. Configure Serverless Applications
 To define an application using Serverless Framework several components may be used:
 * Define the lambda functions
 * Implement events
 * Define AWS resources
 * Include plugins for additional functionality
 
-### 9.1 Project Structure:
+### 10.1 Project Structure:
 ```
 .
 ├── node_modules/
@@ -105,7 +132,7 @@ To define an application using Serverless Framework several components may be us
 └── package-lock.json
 ```
 
-### 9.2 `serverless.yaml` Structure:
+### 10.2 `serverless.yaml` Structure:
 * **Provider**
   - Provides the provider-specific configuration.
   - For example, if we use **AWS**, we'll specify AWS-specific configuration here.
@@ -166,7 +193,7 @@ resources:
     # CloudFormation definition in YAML
 ```
 
-### 9.3 Supported Events
+### 10.3 Supported Events
 * API Gateway - REST API
 * SQS - Simple Queue Service
 * Alexa - for voice applications
@@ -174,3 +201,21 @@ resources:
 * CloudWatch Logs - process log events
 * Kinesis, DynamoDB - process a stream of updates
 * SNS - simple notification service
+
+### 10.4 Create a Serverless Project
+INSTALL
+```bash
+npm install -g serverless
+```
+CREATE PROJECT
+```bash
+serverless create --template aws-nodejs --path folder-name
+```
+INSTALL PLUGIN
+```bash
+npm install plugin-name --save-dev
+```
+DEPLOY PROJECT
+```bash
+sls deploy -v
+```
