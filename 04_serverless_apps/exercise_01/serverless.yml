@@ -1,0 +1,9 @@
+service: hello-lambda
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+
+functions:
+  hello:
+    handler: lambda.handler

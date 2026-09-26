@@ -1,0 +1,34 @@
+service: http-metrics
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+
+  iam:
+    role:
+      statements:
+        # Allow the Lambda function to publish custom CloudWatch metrics
+        - Effect: Allow
+          Action: 'cloudwatch:PutMetricData'
+          Resource: '*'
+
+  # Environment variables read by lambda.js
+  environment:
+    # Name of the monitored service, used as the "ServiceName" metric dimension
+    SERVICE_NAME: google
+    # URL the function sends a GET request to on every invocation
+    URL: https://www.google.com
+
+functions:
+  # Lambda function name
+  http-monitor:
+    # File "lambda.js", exported function "handler"
+    handler: lambda.handler
+
+    # Events that trigger the Lambda function
+    events:
+      # Run the "http-monitor" function every minute
+      - schedule:
+          rate: rate(1 minute)
+          enabled: true
