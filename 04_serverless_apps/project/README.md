@@ -245,3 +245,6 @@ POST - https://<apiId>.execute-api.us-east-1.amazonaws.com/dev/todos
 
 Restart `npm start` after changing `.env`, because the values are only read
 when the server starts.
+
+
+Reference: https://github.com/wallacewong82/serverless-for-udacity/tree/master/client
